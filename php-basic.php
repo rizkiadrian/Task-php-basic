@@ -1,7 +1,7 @@
 <?php
 
   class player{
-    public $name,$mana,$blood;
+    private $name,$mana,$blood;
     function __construct($new_name){
     $this->name = $new_name;
     $this->mana = 40;
@@ -21,11 +21,11 @@
    }
     
    public function attack() {
-     $mana = $mana - 10;
+     $this->mana = $this->mana - 10;
    }
    
    public function defend() {
-     $blood = $blood - 10;
+     $this->blood = $this->blood - 30;
    }
 
     
@@ -39,7 +39,11 @@ $attacker = false;
 $j = count($players);
 $attackern = "";
 $deffern = "";
-
+$done = false;
+if ($done == true){
+  print_r("Game Over"."\n");
+}
+else{
 do {
 
   print_r("Type new to create character"."\n");
@@ -53,11 +57,17 @@ do {
     $players[$inputname] = new player($inputname);
     $players[$inputname]->set_name($inputname);
     $playername=$players[$inputname]->get_name();
+    if (count($players)>=3){
+      print_r("Player has reached maximum typed start "."\n");
+      fscanf(STDIN, "%s\n", $menu);
+
+    }
     } 
   
   
 
   if ($menu == "start"){
+    do{
     print_r("who will attack"."\n");
     fscanf(STDIN, "%s\n", $select);
     print_r("who will deffending"."\n");
@@ -69,13 +79,19 @@ do {
       $players[$select]->attack();
       $mana =$players[$select]->get_mana();
       $blood =$players[$select]->get_blood();
-       print_r("remaining mana : "."$mana". "remaining blood"."$blood");
-        $deffern = $players[$selecd]->get_name();
+       print_r("remaining mana :  "."$mana ". "remaining blood "."$blood "."\n");
+        $attackern = $players[$select]->get_name();
       print_r($deffern."deffending"."\n");
       $players[$select]->attack();
       $mana =$players[$select]->get_mana();
       $blood =$players[$select]->get_blood();
-       print_r("remaining mana : ".$mana. "remaining blood".$blood);
+      if($mana <= 0 or $blood <= 0){
+        print_r("player ".$attackern."Has been defeated "."\n");
+        $done = true;
+       }
+       else{
+       print_r("remaining mana : ".$mana. "remaining blood "."$blood "."\n");
+       }
     }
      if ($selecd==$players[$inputname]->get_name()){
       $attackern = $players[$select]->get_name();
@@ -83,15 +99,23 @@ do {
       $players[$select]->attack();
       $mana =$players[$select]->get_mana();
       $blood =$players[$select]->get_blood();
-       print_r("remaining mana : ".$mana. "remaining blood".$blood);
+       print_r("remaining mana : ".$mana. "remaining blood"."$blood" ."\n");
       $deffern = $players[$selecd]->get_name();
       print_r($deffern."deffending"."\n");
       $players[$selecd]->defend();
       $mana =$players[$selecd]->get_mana();
       $blood =$players[$selecd]->get_blood();
-       print_r("remaining mana : ".$mana. "remaining blood".$blood);
+      if($mana <= 0 or $blood <=0){
+        print_r("player ".$deffern."Has been defeated "."\n");
+        $done = true;
+       }
+       else{
+       print_r("remaining mana : ".$mana. "remaining blood "."$blood "."\n");
+       }
 
     }
+  }
+  while($done == false);
 
 
   }
@@ -103,6 +127,7 @@ do {
   }     
   
 while ($x = 1);
+}
 
 
  
